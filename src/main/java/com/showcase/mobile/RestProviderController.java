@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.showcase.jpa.domain.Customer;
+import com.showcase.jpa.domain.CustomerList;
 import com.showcase.mongo.domain.Movie;
 import com.showcase.mongo.domain.MovieList;
+import com.showcase.service.CustomerService;
 import com.showcase.service.MovieService;
 
 @Controller
@@ -22,6 +25,21 @@ public class RestProviderController {
 
 	@Autowired
 	private MovieService movieService;
+	
+	@Autowired
+	private CustomerService custService;
+	
+	@RequestMapping(value = "/customers", method = RequestMethod.GET, headers = "Accept=application/xml, application/json")
+	public @ResponseBody CustomerList getAllCustomers() {
+		logger.debug("Provider has received request to getAllCustomers");
+
+		// Call service here
+		CustomerList result = new CustomerList();
+		result.setData(custService.findAllCustomers());
+
+		logger.debug("return the results");
+		return result;
+	}
 
 	@RequestMapping(value = "/movies", method = RequestMethod.GET, headers = "Accept=application/xml, application/json")
 	public @ResponseBody MovieList getMovies() {
@@ -30,6 +48,11 @@ public class RestProviderController {
 		// Call service here
 		MovieList result = new MovieList();
 		result.setData(movieService.findAllMovies());
+		
+		/*custService.saveCustomer(new Customer("Gopinathan", "Mani"));
+		custService.saveCustomer(new Customer("Praveen", "Karupaiya"));
+		custService.saveCustomer(new Customer("Manikandan", "Syam"));
+		custService.saveCustomer(new Customer("Selvan", "Kiran"));*/
 
 		logger.debug("return the results");
 		return result;

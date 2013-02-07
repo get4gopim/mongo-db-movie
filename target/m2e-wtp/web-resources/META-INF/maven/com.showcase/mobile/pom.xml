@@ -10,7 +10,7 @@
 	
 	<properties>
 		<java-version>1.6</java-version>
-		<org.springframework-version>3.1.1.RELEASE</org.springframework-version>
+		<org.springframework-version>3.1.2.RELEASE</org.springframework-version>
 		<org.springframework.mobile-version>1.0.0.RELEASE</org.springframework.mobile-version>
 		<org.aspectj-version>1.6.9</org.aspectj-version>
 		<org.slf4j-version>1.6.1</org.slf4j-version>
@@ -23,7 +23,10 @@
 		<org.codehaus.mojo.aspectj-version>1.4</org.codehaus.mojo.aspectj-version>
 		<org.codehaus.mojo.tomcat-version>1.1</org.codehaus.mojo.tomcat-version>
 		
-		<spring.data.mongo.version>1.0.0.M4</spring.data.mongo.version>
+		<hibernate.version>4.1.4.Final</hibernate.version>
+		<aspectj.version>1.6.12</aspectj.version>
+		
+		<spring.data.mongo.version>1.1.1.RELEASE</spring.data.mongo.version>
 		<org.cloudfoundry-version>0.8.1</org.cloudfoundry-version>
 	</properties>
 	
@@ -66,6 +69,23 @@
 			<version>${org.springframework.mobile-version}</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+
+		
 		<!-- Spring RESTfull -->
 
 	    <dependency>
@@ -81,6 +101,13 @@
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
 			<version>${org.aspectj-version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${aspectj.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<!-- Logging -->
@@ -184,6 +211,46 @@
 		   <artifactId>cloudfoundry-runtime</artifactId>
 		   <version>${org.cloudfoundry-version}</version>
 		</dependency>
+		
+		<!-- JPA and Hibernate -->
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.0-api</artifactId>
+			<version>1.0.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>1.2.0.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+		     <groupId>org.springframework.data</groupId>
+		     <artifactId>spring-data-commons-core</artifactId>
+		     <version>1.4.0.RELEASE</version>
+		</dependency>
+		
+		<!-- MySQL Connector -->
+		<dependency>
+	            <groupId>mysql</groupId>
+	            <artifactId>mysql-connector-java</artifactId>
+	            <version>5.1.10</version>
+	    </dependency>
+		
+		<!-- Commons DPCP -->
+		<dependency>
+		  <groupId>commons-dbcp</groupId>
+		  <artifactId>commons-dbcp</artifactId>
+		  <version>1.4</version>
+		</dependency>
+		
 		
 	</dependencies>
 	<build>
