@@ -15,8 +15,8 @@ import com.showcase.jpa.domain.Customer;
 import com.showcase.jpa.domain.CustomerList;
 import com.showcase.mongo.domain.Movie;
 import com.showcase.mongo.domain.MovieList;
-import com.showcase.service.CustomerService;
-import com.showcase.service.MovieService;
+import com.showcase.service.customer.CustomerService;
+import com.showcase.service.movies.MovieService;
 
 @Controller
 public class RestProviderController {

@@ -32,7 +32,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.showcase.mongo.domain.Feedback;
 import com.showcase.mongo.domain.IMDBMovie;
 import com.showcase.mongo.domain.Movie;
-import com.showcase.service.MovieService;
+import com.showcase.service.movies.MovieService;
 
 /**
  * Handles requests for the showcase application.

@@ -1,4 +1,4 @@
-package com.showcase.service;
+package com.showcase.service.movies;
 
 import java.math.BigInteger;
 import java.util.HashMap;

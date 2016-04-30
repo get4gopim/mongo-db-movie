@@ -1,4 +1,4 @@
-package com.showcase.service;
+package com.showcase.service.customer;
 
 import java.util.List;
 
