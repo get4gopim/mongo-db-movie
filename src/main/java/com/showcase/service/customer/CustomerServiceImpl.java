@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.showcase.jpa.domain.Customer;
 import com.showcase.jpa.repository.CustomerRepository;
 
-@Service
+//@Service
 public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired

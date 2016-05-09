@@ -11,11 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.showcase.jpa.domain.Customer;
 import com.showcase.jpa.domain.CustomerList;
 import com.showcase.mongo.domain.Movie;
 import com.showcase.mongo.domain.MovieList;
-import com.showcase.service.customer.CustomerService;
 import com.showcase.service.movies.MovieService;
 
 @Controller
@@ -26,8 +24,8 @@ public class RestProviderController {
 	@Autowired
 	private MovieService movieService;
 	
-	@Autowired
-	private CustomerService custService;
+	/*@Autowired
+	private CustomerService custService;*/
 	
 	@RequestMapping(value = "/customers", method = RequestMethod.GET, headers = "Accept=application/xml, application/json")
 	public @ResponseBody CustomerList getAllCustomers() {
@@ -35,7 +33,7 @@ public class RestProviderController {
 
 		// Call service here
 		CustomerList result = new CustomerList();
-		result.setData(custService.findAllCustomers());
+		//result.setData(custService.findAllCustomers());
 
 		logger.debug("return the results");
 		return result;
