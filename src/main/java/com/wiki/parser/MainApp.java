@@ -1,6 +1,5 @@
 package com.wiki.parser;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import com.showcase.mongo.domain.Movie;
@@ -48,11 +46,11 @@ public class MainApp {
 		
 		MainApp app = new MainApp();
 		app.start();
-
 		
-		/*String link = "https://en.wikipedia.org/wiki/Philadelphia_(film)";
+		
+		/*String link = "https://en.wikipedia.org/wiki/The_Sting";
 		WikiMovieInfoTask task = new WikiMovieInfoTask(link, 2016);
-		task.call();*/		
+		task.call();*/
 	}
 	
 	
@@ -60,7 +58,7 @@ public class MainApp {
 	public void start() {
 		Set<Future<MovieList>> set = new HashSet<Future<MovieList>>();
 		
-		for (int year = 1967; year <= 1967; year++) {
+		for (int year = 1980; year <= 2016; year++) {
 			LOGGER.info ("Year " + year + " process yet to begin...");
 			Callable<MovieList> movieTask = new WikiMovieExtractorTask("Thread " + year, year);
 			Future<MovieList> future = threadPool.submit(movieTask);
@@ -94,6 +92,11 @@ public class MainApp {
 	}
 	
 	public static void waitAllSiteProcessThreadsToFinish(ThreadPoolExecutor executor, BlockingQueue<Runnable> queue) throws InterruptedException {
+		/*if (executor == null || queue.isEmpty()) {
+			LOGGER.info("no tasks to stop!!");
+			return;
+		}*/
+		
 		executor.shutdown();
 
 		try {

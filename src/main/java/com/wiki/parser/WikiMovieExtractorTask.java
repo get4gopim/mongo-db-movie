@@ -22,7 +22,7 @@ import com.showcase.mongo.domain.MovieList;
 
 public class WikiMovieExtractorTask implements Callable<MovieList> {
 
-	private static final Logger LOGGER = Logger.getLogger(MainApp.class);
+	private static final Logger LOGGER = Logger.getLogger(WikiMovieExtractorTask.class);
 	
 	private String name;
 	private int year;
@@ -46,28 +46,39 @@ public class WikiMovieExtractorTask implements Callable<MovieList> {
 	public MovieList call() {
 		MovieList movieList = null;
 		try {
-			movieList = listMovieNames();
+			int tableId = 2;
+			movieList = listMovieNames(tableId);
+			while (movieList.getMovieList().isEmpty()) {
+				tableId++;
+				movieList = listMovieNames(tableId);
+				
+				if (tableId == 4) {
+					break;
+				}
+			}
 		} catch (Exception ex) {
 			LOGGER.error("Error in parsing year: " + this.year, ex);
 		}
 		return movieList;
 	}
 
-	public MovieList listMovieNames() throws Exception {
-		Document doc = Jsoup.connect("https://en.wikipedia.org/wiki/" + this.year + "_in_film").get();
-		Element table = doc.select("div#mw-content-text table").get(2);
+	public MovieList listMovieNames(int tableId) throws Exception {
+		Document doc = Jsoup.connect("https://en.wikipedia.org/wiki/" + this.year + "_in_film").timeout(5*1000).get();
+		Element table = doc.select("div#mw-content-text table").get(tableId);
 		Elements rows = table.select("tr");
 		
 		Set<Future<Movie>> set = new HashSet<Future<Movie>>();
 		MovieList movieList = new MovieList();
 		
-		LOGGER.debug("size = " + rows.size());
+		LOGGER.debug("tableId = " + tableId + "; size = " + rows.size());
 		
-		if (rows.size() <= 2) {
+		/*if (rows.size() <= 2) {
 			table = doc.select("div#mw-content-text table").get(3);
 			rows = table.select("tr");
 			LOGGER.debug("revised size = " + rows.size());
-		}		
+		}*/	
+		
+		//LOGGER.debug("rows = " + rows);
 		
 		for (Element row : rows) {
 			Elements link = row.select("td i a");
@@ -87,7 +98,9 @@ public class WikiMovieExtractorTask implements Callable<MovieList> {
 		}
 		
 		try {
-			MainApp.waitAllSiteProcessThreadsToFinish(threadPool, workQueue);
+			if (!workQueue.isEmpty()) {
+				MainApp.waitAllSiteProcessThreadsToFinish(threadPool, workQueue);
+			}
 			
 			List<Movie> data = new ArrayList<>();
 			for (Future<Movie> future : set) {
@@ -95,6 +108,7 @@ public class WikiMovieExtractorTask implements Callable<MovieList> {
 				data.add(movie);
 			}
 			movieList.setData(data);
+			
 		} catch (Exception ex) {
 			LOGGER.error(ex);
 		}

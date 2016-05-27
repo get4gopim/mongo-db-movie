@@ -2,7 +2,9 @@ package com.wiki.parser;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -11,16 +13,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 
 import com.showcase.mongo.domain.Movie;
 
 public class WikiMovieInfoTask implements Callable<Movie> {
 
-	private static final Logger LOGGER = Logger.getLogger(MainApp.class);
+	private static final Logger LOGGER = Logger.getLogger(WikiMovieInfoTask.class);
 	
 	//private static WikiParserTask PARSER = new WikiParserTask();
 	
@@ -74,10 +73,16 @@ public class WikiMovieInfoTask implements Callable<Movie> {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return sdf.parse(releaseDate);
 	}
+	
+	private int getYear(Date releaseDate) throws Exception {
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(releaseDate);
+		return calendar.get(Calendar.YEAR);
+	}
 
 	public Movie getMovieDetails(String movieLink) throws Exception {
 		Movie movie = new Movie();
-		Document doc = Jsoup.connect(movieLink).get();
+		Document doc = Jsoup.connect(movieLink).timeout(5*1000).get();
 		Element table = doc.select("div#mw-content-text table").get(0);
 		
 		int i = 0;
@@ -114,21 +119,23 @@ public class WikiMovieInfoTask implements Callable<Movie> {
 				
 				if (th.text().trim().equalsIgnoreCase("Release dates")) {
 					Elements starringDiv = row.select("div ul li");
+					String relDate = "";
 					
-					Element releaseDate = starringDiv.get(0);
-					String relDate = releaseDate.text();
-					Date dt = null;
 					try {
+						Element releaseDate = starringDiv.get(0);
+						relDate = releaseDate.text();
+						Date dt = null;
+					
 						relDate = relDate.substring( relDate.indexOf("(")+1, relDate.indexOf(")") );
 						dt = getDate (relDate);
 						movie.setReleaseDate(dt.getTime());
+						movie.setReleaseYear(getYear(dt));
 						//LOGGER.debug("releaseDate in msec = " + dt.getTime());
 					} catch (Exception ex) {
 						LOGGER.error("Release Date Parse Error", ex);
 					}
 					
 					LOGGER.debug("releaseDate = " + relDate);
-					
 				}
 				
 				if (th.text().trim().equalsIgnoreCase("Starring")) {
