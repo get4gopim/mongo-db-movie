@@ -22,13 +22,21 @@
   	<context:component-scan base-package="com.showcase.service"></context:component-scan>
   	
   	<!-- Mongo Cloud Profile 
-    <cloud:mongo-db-factory id="mongoDbFactory" /> 
+    <cloud:mongo-db-factory id="mongoDbFactory" /> -->
+    
+    <mongo:db-factory
+	    id="mongoDbFactory"
+	    dbname="pwdtest"
+	    host="127.0.0.1"
+	    port="1234"
+	    username="test_user"
+	    password="test_pass" />
     
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg ref="mongoDbFactory" />
-    </bean> -->
+    </bean> 
     
-    <!-- Mongo Local Profile -->
+    <!-- Mongo Local Profile 
   	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 	     <constructor-arg name="mongo" ref="mongo"/>
 	     <constructor-arg name="databaseName" value="test"/>
@@ -38,7 +46,7 @@
      	<property name="host" value="localhost"/>
      	<property name="port" value="27017"/>
     </bean>
-	
+	-->
      
      <!-- RESTfull spring -->
      
@@ -60,8 +68,8 @@
             <list>
                 <value>com.showcase.mongo.domain.Movie</value>
                 <value>com.showcase.mongo.domain.MovieList</value>
-                <value>com.showcase.jpa.domain.Customer</value>
-                <value>com.showcase.jpa.domain.CustomerList</value>               
+               <!-- <value>com.showcase.jpa.domain.Customer</value>
+                <value>com.showcase.jpa.domain.CustomerList</value>  -->               
             </list>
         </property>
     </bean>
