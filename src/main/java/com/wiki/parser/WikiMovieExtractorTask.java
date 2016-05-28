@@ -26,13 +26,15 @@ public class WikiMovieExtractorTask implements Callable<MovieList> {
 	
 	private String name;
 	private int year;
+	private String language;
 	
 	private ThreadPoolExecutor threadPool;
 	private BlockingQueue<Runnable> workQueue;
 	
-	public WikiMovieExtractorTask(String name, int year) {
+	public WikiMovieExtractorTask(String name, int year, String language) {
 		this.name = name;
 		this.year = year;
+		this.language = language;
 		
 		workQueue = new LinkedBlockingQueue<Runnable>();
 		threadPool = new ThreadPoolExecutor(MainApp.CORE_POOL_SIZE, MainApp.MAX_POOL_SIZE, MainApp.KEEP_ALIVE_TIME, TimeUnit.SECONDS, workQueue);
@@ -47,6 +49,9 @@ public class WikiMovieExtractorTask implements Callable<MovieList> {
 		MovieList movieList = null;
 		try {
 			int tableId = 2;
+			if (this.language.equalsIgnoreCase("tamil")) {
+				tableId = 1;
+			}
 			movieList = listMovieNames(tableId);
 			while (movieList.getMovieList().isEmpty()) {
 				tableId++;
@@ -63,7 +68,12 @@ public class WikiMovieExtractorTask implements Callable<MovieList> {
 	}
 
 	public MovieList listMovieNames(int tableId) throws Exception {
-		Document doc = Jsoup.connect("https://en.wikipedia.org/wiki/" + this.year + "_in_film").timeout(5*1000).get();
+		String moviesLinkUrl = "https://en.wikipedia.org/wiki/" + this.year + "_in_film";
+		if (this.language.equalsIgnoreCase("tamil")) {
+			moviesLinkUrl = "https://en.wikipedia.org/wiki/List_of_Tamil_films_of_" + this.year;
+		}		
+		Document doc = Jsoup.connect(moviesLinkUrl).timeout(5*1000).get();
+		
 		Element table = doc.select("div#mw-content-text table").get(tableId);
 		Elements rows = table.select("tr");
 		

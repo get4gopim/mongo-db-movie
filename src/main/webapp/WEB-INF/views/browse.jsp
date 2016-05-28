@@ -31,7 +31,21 @@
 </head>
 <body>
 	<div id="wrap">
-		<div id="header"></div>
+		<div id="header">			
+			<form action="searchmovie.htm" method="post" id="searchMovieForm">
+			
+				<select name="searchBy" id="searchBy">
+				  <option value="year" <c:if test="${searchBy != null && searchBy == 'year'}">selected</c:if> >Year</option>
+				  <option value="title" <c:if test="${searchBy != null && searchBy == 'title'}">selected</c:if> >Title</option>				  
+				  <option value="director" <c:if test="${searchBy != null && searchBy == 'director'}">selected</c:if> >Directed By</option>
+				  <option value="music" <c:if test="${searchBy != null && searchBy == 'music'}">selected</c:if> >Music By</option>
+				  <option value="actor" <c:if test="${searchBy != null && searchBy == 'actor'}">selected</c:if> >Actor</option>
+				  <option value="language" <c:if test="${searchBy != null && searchBy == 'language'}">selected</c:if> >Language</option>
+				</select>
+				<input name="searchText" id="searchText" type="text" value="<c:if test="${searchText != null}">${searchText}</c:if>" size="10" />
+				<input name="btnSearchMovie" id="btnSearchMovie" value="Search Movie" type="submit" class="button-submit" />
+			</form>
+		</div>
 		
 		<h3>Movie Browse</h3>
 		<table border="0" cellpadding="1" cellspacing="1">

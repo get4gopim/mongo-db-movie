@@ -31,13 +31,18 @@
 	</script>
 </head>
 <body>
-		
+	<jsp:useBean id="myDate" class="java.util.Date"/>
+	<c:if test="${movie != null}">
+    	<c:set target="${myDate}" property="time" value="${movie.releaseDate}"/>
+    </c:if>
+    
 		<div id="content">
-			<h1 class="top-aligned">Add Movie Request</h1>
+			<h1 class="top-aligned">Movie Tag</h1>
 			<div class="box-flat">
 			<form action="addmovie.htm" method="post" id="addMovieForm">
 				<fieldset>
-					<legend>Movie Information</legend>
+					<legend><c:if test="${movie != null}">${movie.title} (Released On: <fmt:formatDate value="${myDate}"  pattern="EEEE, dd, MMMM yyyy" timeZone="IST"/>)</c:if>
+					</legend>
 					
 					<c:if test="${movie != null}">
 						<p align="left">
@@ -45,18 +50,19 @@
 						</p>
 					</c:if>
 					
+					<label>Language: <c:if test="${movie != null}">${movie.language}</c:if></label><br/><br/>
 					<label>Movie Name</label>
-					<input name="title" id="title" type="text" value="<c:if test="${movie != null}">${movie.title}</c:if>" />
+					<input name="title" id="title" readonly type="text" value="<c:if test="${movie != null}">${movie.title}</c:if>" />
 					<label>Actor Name</label>
 					<input name="actor" id="actor" type="text" value="<c:if test="${movie != null}">${movie.actorName}</c:if>" />
 					<label>Actress Name</label>
 					<input name="actress" id="actress" type="text" value="<c:if test="${movie != null}">${movie.actressName}</c:if>" />
 					<label>Directed By</label>
-					<input name="director" id="director" type="text" value="<c:if test="${movie != null}">${movie.flimDirector}</c:if>" />
+					<input name="director" id="director" readonly type="text" value="<c:if test="${movie != null}">${movie.flimDirector}</c:if>" />
 					<label>Music By</label>
 					<input name="music" id="music" type="text" value="<c:if test="${movie != null}">${movie.musicDirector}</c:if>" />
 					<label>Image Url</label>
-					<input name="imageUrl" id="imageUrl" type="text" value="<c:if test="${movie != null}">${movie.imageUrl}</c:if>" />
+					<input name="imageUrl" id="imageUrl" readonly type="text" value="<c:if test="${movie != null}">${movie.imageUrl}</c:if>" />
 					
 					<!--alternate submit button-->
 					<!--input name="button" type="button" id="button" value="Submit" /-->

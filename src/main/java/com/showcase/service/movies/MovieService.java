@@ -27,5 +27,8 @@ public interface MovieService {
 	
 	public IMDBMovie getIMDBMovieByTitle(String searchTitle);
 	
-	List<Movie> findByReleaseYear(int year);	
+	List<Movie> findByReleaseYear(int year);
+	List<Movie> findByTitleAndFlimDirector(String title, String flimDirector);
+	List<Movie> findByTitle(String title);
+	List<Movie> findByLanguage(String language);
 }

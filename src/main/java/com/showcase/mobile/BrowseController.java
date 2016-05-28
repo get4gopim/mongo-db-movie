@@ -73,6 +73,44 @@ public class BrowseController {
 		return mav;
 	}
 	
+	@RequestMapping("/searchmovie")
+	public ModelAndView searchMovie(HttpServletRequest servletRequest) {
+		logger.info("searchMovie ...");
+		ModelAndView mav = new ModelAndView();
+		
+		String action = servletRequest.getParameter("btnSearchMovie");
+		logger.info("action = " + action);
+		
+		if (action.equalsIgnoreCase("Search Movie")) {
+			String searchBy = servletRequest.getParameter("searchBy");
+			String searchText = servletRequest.getParameter("searchText");
+			
+			if (searchBy != null && searchBy.equalsIgnoreCase("music")) {
+				mav.addObject("listMovies", movieService.findByMusicDirector(searchText));
+			} else if (searchBy != null && searchBy.equalsIgnoreCase("director")) {
+				mav.addObject("listMovies", movieService.findByFlimDirector(searchText));
+			} else if (searchBy != null && searchBy.equalsIgnoreCase("title")) {
+				mav.addObject("listMovies", movieService.findByTitleLike(searchText));
+			} else if (searchBy != null && searchBy.equalsIgnoreCase("actor")) {
+				mav.addObject("listMovies", movieService.findByActorName(searchText));
+			} else if (searchBy != null && searchBy.equalsIgnoreCase("language")) {
+				mav.addObject("listMovies", movieService.findByLanguage(searchText));
+			} else if (searchBy != null && searchBy.equalsIgnoreCase("year")) {
+				int year = Integer.parseInt(searchText);
+				mav.addObject("listMovies", movieService.findByReleaseYear(year));
+			} else {
+				mav.addObject("listMovies", movieService.findAllMovies());
+			}
+		
+			mav.addObject("searchBy", searchBy);
+			mav.addObject("searchText", searchText);
+		}		
+		
+		logger.info("searchMovie sucess ... change to browse view... ");
+		mav.setViewName("browse");
+		return mav;
+	}
+	
 	@RequestMapping("/addmovie")
 	public ModelAndView addmovie(HttpServletRequest servletRequest) {
 		logger.info("addmovie ...");
@@ -80,7 +118,6 @@ public class BrowseController {
 		
 		String action = servletRequest.getParameter("btnAddMovie");
 		logger.info("action = " + action);
-		
 		
 		String title = servletRequest.getParameter("title");
 		String actorName = servletRequest.getParameter("actor");

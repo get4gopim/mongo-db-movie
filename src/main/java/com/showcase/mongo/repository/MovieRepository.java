@@ -11,11 +11,11 @@ public interface MovieRepository extends CrudRepository<Movie, BigInteger> {
 
 	List<Movie> findByTitle(String title);
 	
-	List<Movie> findByMusicDirector(String musicDirector);
+	List<Movie> findByMusicDirectorLike(String musicDirector);
 	
-	List<Movie> findByFlimDirector(String flimDirector);
+	List<Movie> findByFlimDirectorLike(String flimDirector);
 	
-	List<Movie> findByActorName(String actorName);
+	List<Movie> findByActorNameLike(String actorName);
 	
 	List<Movie> findByActressName(String actressName);
 	
@@ -23,6 +23,10 @@ public interface MovieRepository extends CrudRepository<Movie, BigInteger> {
 	
 	List<Movie> findByMusicDirectorAndFlimDirector(String musicDirector, String flimDirector);
 	
+	List<Movie> findByTitleAndFlimDirector(String title, String flimDirector);
+	
 	List<Movie> findByTitleLike(String title);
+	
+	List<Movie> findByLanguageContaining(String language);
 	
 }

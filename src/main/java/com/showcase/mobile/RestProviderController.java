@@ -88,6 +88,8 @@ public class RestProviderController {
 		} else if (searchBy != null && searchBy.equalsIgnoreCase("year")) {
 			int year = Integer.parseInt(value);
 			result.setData(movieService.findByReleaseYear(year));
+		} else if (searchBy != null && searchBy.equalsIgnoreCase("language")) {
+			result.setData(movieService.findByLanguage(value));
 		} else {
 			result.setData(movieService.findAllMovies());
 		}
@@ -102,10 +104,26 @@ public class RestProviderController {
 		
     	LOGGER.debug("Request : " + movie);
     	
-    	List<Movie> movies = movieService.findByTitleLike(movie.getTitle());
+    	List<Movie> movies = movieService.findByTitleAndFlimDirector(movie.getTitle(), movie.getFlimDirector());
     	
     	if (movies.isEmpty()) {
     		movieService.addMovie(movie);
+    	} else {
+    		if (movies.size() > 1) {
+    			LOGGER.warn("Multiple movies found in the same name and director!!");
+    		} else {
+    			LOGGER.info("Update existing movie name!!");
+	    		Movie dbMovie = movies.get(0);
+	    		if (movie.getReleaseYear() != 0) dbMovie.setReleaseYear(movie.getReleaseYear());
+	    		if (movie.getReleaseDate() != 0) dbMovie.setReleaseDate(movie.getReleaseDate());;
+	    		if (movie.getActorName() != null) dbMovie.setActorName(movie.getActorName());
+	    		if (movie.getActressName() != null) dbMovie.setActressName(movie.getActressName());
+	    		if (movie.getImageUrl() != null) dbMovie.setImageUrl(movie.getImageUrl());
+	    		if (movie.getMusicDirector() != null) dbMovie.setMusicDirector(movie.getMusicDirector());
+	    		if (movie.getLanguage() != null) dbMovie.setLanguage(movie.getLanguage());
+	    		
+	    		movieService.addMovie(dbMovie);
+    		}
     	}
 		
 		LOGGER.debug("return the results");

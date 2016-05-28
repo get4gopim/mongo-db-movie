@@ -34,6 +34,7 @@ public class Movie {
 	
 	private int releaseYear;
 	
+	private String language;	
 
 	public Movie() {
 		super();
@@ -142,12 +143,19 @@ public class Movie {
 		this.releaseYear = releaseYear;
 	}
 
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
 	@Override
 	public String toString() {
-		return "Movie [id=" + id + ", title=" + title + ", type=" + type + ", isAvailable=" + isAvailable
-				+ ", actorName=" + actorName + ", actressName=" + actressName + ", musicDirector=" + musicDirector
-				+ ", flimDirector=" + flimDirector + ", imageUrl=" + imageUrl + ", releaseDate=" + releaseDate
-				+ ", releaseYear=" + releaseYear + "]";
+		return "Movie [id=" + id + ", title=" + title + ", actorName=" + actorName + ", actressName=" + actressName
+				+ ", musicDirector=" + musicDirector + ", flimDirector=" + flimDirector + ", imageUrl=" + imageUrl
+				+ ", releaseDate=" + releaseDate + ", releaseYear=" + releaseYear + ", language=" + language + "]";
 	}
 
 }

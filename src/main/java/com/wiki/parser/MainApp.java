@@ -48,7 +48,7 @@ public class MainApp {
 		app.start();
 		
 		
-		/*String link = "https://en.wikipedia.org/wiki/The_Sting";
+		/*String link = "https://en.wikipedia.org/wiki/Kaaval";
 		WikiMovieInfoTask task = new WikiMovieInfoTask(link, 2016);
 		task.call();*/
 	}
@@ -58,9 +58,9 @@ public class MainApp {
 	public void start() {
 		Set<Future<MovieList>> set = new HashSet<Future<MovieList>>();
 		
-		for (int year = 1980; year <= 2016; year++) {
+		for (int year = 1940; year <= 1970; year++) {
 			LOGGER.info ("Year " + year + " process yet to begin...");
-			Callable<MovieList> movieTask = new WikiMovieExtractorTask("Thread " + year, year);
+			Callable<MovieList> movieTask = new WikiMovieExtractorTask("Thread " + year, year, "tamil");
 			Future<MovieList> future = threadPool.submit(movieTask);
 			set.add(future);
 		}

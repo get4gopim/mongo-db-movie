@@ -70,15 +70,36 @@ public class MovieServiceImpl implements MovieService {
 	
 	public List<Movie> findByMusicDirector(String musicDirector) {
 		logger.info("findAllMovies ...");
-		List<Movie> results = (List<Movie>) movieRepository.findByMusicDirector(musicDirector);
+		List<Movie> results = (List<Movie>) movieRepository.findByMusicDirectorLike(musicDirector);
 		logger.info("results = " + results);
 		return results;
 	}
 	
 	public List<Movie> findByFlimDirector(String flimDirector) {
 		logger.info("findByMusicDirector ...");
-		List<Movie> results = (List<Movie>) movieRepository.findByFlimDirector(flimDirector);
-		logger.info("results = " + results);
+		List<Movie> results = (List<Movie>) movieRepository.findByFlimDirectorLike(flimDirector);
+		logger.info("size = " + results.size() + "; results = " + results);
+		return results;
+	}
+	
+	public List<Movie> findByLanguage(String language) {
+		logger.info("findByLanguage : " + language);
+		List<Movie> results = (List<Movie>) movieRepository.findByLanguageContaining(language);
+		logger.info("size = " + results.size() + "; results = " + results);
+		return results;
+	}
+	
+	public List<Movie> findByTitleAndFlimDirector(String title, String flimDirector) {
+		logger.info("findByTitleAndFlimDirector ...");
+		List<Movie> results = (List<Movie>) movieRepository.findByTitleAndFlimDirector(title, flimDirector);
+		logger.info("size = " + results.size() + "; results = " + results);
+		return results;
+	}
+	
+	public List<Movie> findByTitle(String title) {
+		logger.info("findByTitle ...");
+		List<Movie> results = (List<Movie>) movieRepository.findByTitle(title);
+		logger.info("size = " + results.size() + "; results = " + results);
 		return results;
 	}
 	
@@ -96,7 +117,7 @@ public class MovieServiceImpl implements MovieService {
 	
 	public List<Movie> findByActorName(String actorName) {
 		logger.info("findByActorName ...");
-		List<Movie> results = (List<Movie>) movieRepository.findByActorName(actorName);
+		List<Movie> results = (List<Movie>) movieRepository.findByActorNameLike(actorName);
 		logger.info("results = " + results);
 		return results;
 	}

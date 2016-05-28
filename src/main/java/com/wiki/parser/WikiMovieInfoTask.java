@@ -1,5 +1,6 @@
 package com.wiki.parser;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,6 +21,9 @@ import com.showcase.mongo.domain.Movie;
 public class WikiMovieInfoTask implements Callable<Movie> {
 
 	private static final Logger LOGGER = Logger.getLogger(WikiMovieInfoTask.class);
+	
+	private static final String CLOUD_SAVE_REST_URL = "http://springmobile.cfapps.io/service/movies/save";
+	private static final String LOCAL_SAVE_REST_URL = "http://localhost:8080/springmobile/service/movies/save";
 	
 	//private static WikiParserTask PARSER = new WikiParserTask();
 	
@@ -50,7 +54,7 @@ public class WikiMovieInfoTask implements Callable<Movie> {
 	
 	public void saveMovie(Movie movie) {
 		try {
-			MainApp.REST_TEMPLATE.postForEntity("http://springmobile.cfapps.io/service/movies/save", movie, ResponseEntity.class);
+			MainApp.REST_TEMPLATE.postForEntity(CLOUD_SAVE_REST_URL, movie, ResponseEntity.class);
 		} catch (Exception e) {
 			LOGGER.error("saveMovie error: " + e);
 		}
@@ -69,9 +73,14 @@ public class WikiMovieInfoTask implements Callable<Movie> {
 		return movie;
 	}
 	
-	private Date getDate(String releaseDate) throws Exception {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		return sdf.parse(releaseDate);
+	private Date getDate(String releaseDate, String format) throws Exception {
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat(format);
+			return sdf.parse(releaseDate);
+		} catch (ParseException ex) {
+			
+		}
+		return null;
 	}
 	
 	private int getYear(Date releaseDate) throws Exception {
@@ -115,28 +124,14 @@ public class WikiMovieInfoTask implements Callable<Movie> {
 					movie.setMusicDirector(music);
 				}
 				
+				String language = getContent("Language", th, td);
+				if (language != null) {
+					movie.setLanguage(language);
+				}
+				
 				//getContent("Release dates", th, td);
 				
-				if (th.text().trim().equalsIgnoreCase("Release dates")) {
-					Elements starringDiv = row.select("div ul li");
-					String relDate = "";
-					
-					try {
-						Element releaseDate = starringDiv.get(0);
-						relDate = releaseDate.text();
-						Date dt = null;
-					
-						relDate = relDate.substring( relDate.indexOf("(")+1, relDate.indexOf(")") );
-						dt = getDate (relDate);
-						movie.setReleaseDate(dt.getTime());
-						movie.setReleaseYear(getYear(dt));
-						//LOGGER.debug("releaseDate in msec = " + dt.getTime());
-					} catch (Exception ex) {
-						LOGGER.error("Release Date Parse Error", ex);
-					}
-					
-					LOGGER.debug("releaseDate = " + relDate);
-				}
+				getReleaseDate(movie, row, th);
 				
 				if (th.text().trim().equalsIgnoreCase("Starring")) {
 					//LOGGER.debug("*** " + th.text() + " ****");					
@@ -165,6 +160,48 @@ public class WikiMovieInfoTask implements Callable<Movie> {
 			i++;
 		}
 		return movie;
+	}
+
+	private void getReleaseDate(Movie movie, Element row, Elements th) {
+		if (th.text().trim().equalsIgnoreCase("Release dates")) {
+			Elements starringDiv = row.select("div ul li");
+			String relDate = "";
+			Date dt = null;
+			
+			//LOGGER.debug("starringDiv = " + starringDiv);
+			
+			try {
+				if (starringDiv != null && !starringDiv.isEmpty()) {
+					Element releaseDate = starringDiv.get(0);
+					relDate = releaseDate.text();
+					relDate = relDate.substring( relDate.indexOf("(")+1, relDate.indexOf(")") );
+					dt = getDate (relDate, "yyyy-MM-dd");
+				} else {
+					starringDiv = row.select("td");
+					relDate = starringDiv.text();
+					if (relDate.indexOf("(") > 0 && relDate.indexOf(")") > 0) {
+						relDate = relDate.substring( relDate.indexOf("(")+1, relDate.indexOf(")") );
+						dt = getDate (relDate, "yyyy-MM-dd");
+					} else {
+						dt = getDate (relDate, "dd MMMM yyyy");
+					}
+				}
+				
+				if (dt == null) {
+					dt = getDate (relDate, "MMMM dd, yyyy");
+				}
+				LOGGER.debug("date = " + dt);
+				
+				if (dt != null) {
+					movie.setReleaseDate(dt.getTime());
+					movie.setReleaseYear(getYear(dt));
+				}
+			} catch (Exception ex) {
+				LOGGER.error("Release Date Parse Error: " + movieLink, ex);
+			}
+			
+			LOGGER.debug("releaseDate = " + relDate);
+		}
 	}
 
 	private String getContent(String header, Elements th, Elements td) {

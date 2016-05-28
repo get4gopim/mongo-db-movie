@@ -17,7 +17,9 @@ public class TestMovieService {
 	
 	@Test
 	public void test() {
-		movieService.findAllMovies();
+		movieService.findByFlimDirector("Jon Favreau");
+		movieService.findByTitle("The Jungle Book");
+		//movieService.findByTitleAndFlimDirector("The Jungle Book", "Jon Favreau");
 	}
 
 }
