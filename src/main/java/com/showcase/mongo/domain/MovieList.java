@@ -11,9 +11,9 @@ public class MovieList {
 	@XmlElement(name="Movie")
 	private List<Movie> data;
 
-	/*public List<Movie> getData() {
-		return data;
-	}*/
+	public List<Movie> getMovieList() {
+		return this.data;
+	}
 
 	public void setData(List<Movie> data) {
 		this.data = data;

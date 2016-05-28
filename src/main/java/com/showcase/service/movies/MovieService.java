@@ -27,4 +27,5 @@ public interface MovieService {
 	
 	public IMDBMovie getIMDBMovieByTitle(String searchTitle);
 	
+	List<Movie> findByReleaseYear(int year);	
 }

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -86,6 +87,11 @@ public class MovieServiceImpl implements MovieService {
 		List<Movie> results = (List<Movie>) movieRepository.findByTitleLike(title);
 		logger.info("results = " + results);
 		return results;
+	}
+	
+	public List<Movie> findByReleaseYear(int year) {
+		logger.info("findByReleaseYear ...");
+		return (List<Movie>) movieRepository.findByReleaseYear(year);
 	}
 	
 	public List<Movie> findByActorName(String actorName) {
@@ -169,5 +175,13 @@ public class MovieServiceImpl implements MovieService {
 		}
 		
 		return movie;
+	}
+	
+	public void saveMovie(Movie movie) {
+		try {
+			restTemplate.postForEntity("http://localhost:8080/springmobile/service/movies/save", movie, ResponseEntity.class);
+		} catch (Exception e) {
+			logger.error("saveMovie error: " + e);
+		}
 	}
 }

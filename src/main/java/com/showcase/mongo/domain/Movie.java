@@ -30,6 +30,10 @@ public class Movie {
 	
 	private String imageUrl;
 	
+	private long releaseDate;
+	
+	private int releaseYear;
+	
 
 	public Movie() {
 		super();
@@ -121,14 +125,29 @@ public class Movie {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
+	
+	public long getReleaseDate() {
+		return releaseDate;
+	}
+
+	public void setReleaseDate(long releaseDate) {
+		this.releaseDate = releaseDate;
+	}
+
+	public int getReleaseYear() {
+		return releaseYear;
+	}
+
+	public void setReleaseYear(int releaseYear) {
+		this.releaseYear = releaseYear;
+	}
 
 	@Override
 	public String toString() {
-		return "Movie [id=" + id + ", title=" + title + ", type=" + type
-				+ ", isAvailable=" + isAvailable + ", actorName=" + actorName
-				+ ", actressName=" + actressName + ", musicDirector="
-				+ musicDirector + ", flimDirector=" + flimDirector
-				+ ", imageUrl=" + imageUrl + "]";
+		return "Movie [id=" + id + ", title=" + title + ", type=" + type + ", isAvailable=" + isAvailable
+				+ ", actorName=" + actorName + ", actressName=" + actressName + ", musicDirector=" + musicDirector
+				+ ", flimDirector=" + flimDirector + ", imageUrl=" + imageUrl + ", releaseDate=" + releaseDate
+				+ ", releaseYear=" + releaseYear + "]";
 	}
 
 }

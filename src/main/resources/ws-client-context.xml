@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:cloud="http://schema.cloudfoundry.org/spring"
+  xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-3.1.xsd
+    http://www.springframework.org/schema/jdbc
+    http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+    http://schema.cloudfoundry.org/spring
+    http://schema.cloudfoundry.org/spring/cloudfoundry-spring.xsd
+    http://www.springframework.org/schema/data/mongo
+    http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
+
+	<bean id="restTemplate1" class="org.springframework.web.client.RestTemplate">
+		<property name="messageConverters">
+			<list>
+				 <ref bean="jaxbMarshallerConverter1" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="jaxbMarshallerConverter1" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+	  <property name="marshaller" ref="jaxbMarshaller1" />
+	  <property name="unmarshaller" ref="jaxbMarshaller1" />
+	</bean>
+	
+	<bean id="jaxbMarshaller1" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="classesToBeBound">
+            <list>
+                <value>com.showcase.mongo.domain.Movie</value>
+                <value>com.showcase.mongo.domain.MovieList</value>
+               <!-- <value>com.showcase.jpa.domain.Customer</value>
+                <value>com.showcase.jpa.domain.CustomerList</value>  -->               
+            </list>
+        </property>
+    </bean>
+
+</beans>
